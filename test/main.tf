@@ -1,23 +1,10 @@
-
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-1"  # Specify the AWS region
 }
-
-resource "aws_s3_bucket" "public_bucket" {
-  bucket = "my-unique-bucket-9781a717-f497-4272-9961-bebf18374868"
-  acl    = "public-read"
-
-  tags = {
-    Name        = "PublicBucket"
-    Environment = "Dev"
-  }
+resource "aws_s3_bucket" "basic_bucket" {
+  bucket = "my-simple-bucket-${random_id.bucket_suffix.hex}"  # Unique bucket name
+  acl    = "private"  # Set the access control list
 }
-
-resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket = aws_s3_bucket.public_bucket.id
-
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+resource "random_id" "bucket_suffix" {
+  byte_length = 2  # Generates a sufficiently unique suffix for the bucket name
 }
